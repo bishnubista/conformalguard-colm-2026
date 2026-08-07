@@ -1,0 +1,60 @@
+{
+  "total": 39935,
+  "legitimate": 19553,
+  "positive": 20382,
+  "splits": {
+    "train": {
+      "total": 26202,
+      "legitimate": 11937,
+      "positive": 14265
+    },
+    "val": {
+      "total": 3742,
+      "legitimate": 1705,
+      "positive": 2037
+    },
+    "cal": {
+      "total": 2000,
+      "legitimate": 2000,
+      "positive": 0
+    },
+    "test": {
+      "total": 7991,
+      "legitimate": 3911,
+      "positive": 4080
+    }
+  },
+  "sources": {
+    "enron_enron1_ham": 3393,
+    "enron_enron1_spam": 1292,
+    "enron_enron2_ham": 4226,
+    "enron_enron2_spam": 1441,
+    "enron_enron3_ham": 3622,
+    "enron_enron3_spam": 1408,
+    "enron_enron4_ham": 1477,
+    "enron_enron4_spam": 3457,
+    "enron_enron5_ham": 1350,
+    "enron_enron5_spam": 2045,
+    "enron_enron6_ham": 1393,
+    "enron_enron6_spam": 3469,
+    "nazario": 1451,
+    "phishing_pot": 4393,
+    "spamassassin_ham": 4092,
+    "spamassassin_spam": 1426
+  },
+  "leakage_cleanup": {
+    "normalization": "lower(strip(body_text))",
+    "hash": "sha256",
+    "split_priority": [
+      "test",
+      "cal",
+      "val",
+      "train"
+    ],
+    "removed_total": 16,
+    "removed_train": 13,
+    "removed_val": 3,
+    "removed_cal": 0,
+    "removed_test": 0
+  }
+}

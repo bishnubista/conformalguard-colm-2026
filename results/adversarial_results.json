@@ -1,0 +1,59 @@
+{
+  "experiment": "adv_robustness",
+  "paper": "ConformalGuard -- COLM 2026",
+  "alpha": 0.01,
+  "weights": {
+    "w1": 0.6,
+    "w2": 0.2,
+    "w3": 0.2
+  },
+  "attack": {
+    "method": "TextFooler (Jin et al. 2019)",
+    "target": "Scorer 1 (BERT body-text classifier) only",
+    "attack_surface_note": "Headers (from_domain, return_path_domain, reply_to_domain, received_hops, etc.) and URL features (urls_json, url_count, has_ip_url, has_shortener, has_href_mismatch) are UNCHANGED. Scorers 2 and 3 are immune to TextFooler by design.",
+    "total_attacked": 500,
+    "n_succeeded": 0,
+    "attack_success_rate": 0.0,
+    "avg_word_perturbation_rate": 0.0,
+    "median_word_perturbation_rate": 0.0,
+    "avg_semantic_similarity": 1.0,
+    "min_semantic_similarity": 1.0,
+    "avg_attack_time_s": 2.46,
+    "total_attack_time_min": 20.5
+  },
+  "methods": [
+    {
+      "method_name": "BERT-only (Scorer 1)",
+      "clean_recall": 0.994,
+      "clean_n_phishing": 500,
+      "adv_recall": 0.994,
+      "adv_n_phishing": 500,
+      "recall_drop_pct": 0.0,
+      "fpr": 0.010227563283047815,
+      "fpr_n_legit": 3911,
+      "fpr_controlled": false,
+      "conformal_threshold": 0.008080320762470446,
+      "alpha": 0.01
+    },
+    {
+      "method_name": "3-scorer conformal (BERT + Auth + URL)",
+      "clean_recall": 0.988,
+      "clean_n_phishing": 500,
+      "adv_recall": 0.988,
+      "adv_n_phishing": 500,
+      "recall_drop_pct": 0.0,
+      "fpr": 0.009204806954743032,
+      "fpr_n_legit": 3911,
+      "fpr_controlled": true,
+      "conformal_threshold": 0.2,
+      "alpha": 0.01
+    }
+  ],
+  "data": {
+    "test_n_legit": 3911,
+    "test_n_phishing": 4080,
+    "cal_n": 2000,
+    "attacked_n": 500,
+    "clean_subset_n": 500
+  }
+}

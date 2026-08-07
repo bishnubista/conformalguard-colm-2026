@@ -1,0 +1,18 @@
+{
+  "alpha": 0.01,
+  "target_prevalence": 0.02,
+  "validation_legitimate": 1705,
+  "calibration_legitimate": 2000,
+  "test_legitimate": 3911,
+  "test_positive": 4080,
+  "raw_threshold": 0.002713480000000004,
+  "bootstrap_resamples": 5000,
+  "bootstrap_seed": 20260527,
+  "raw_false_positives_test": 33,
+  "conformal_false_positives_test": 23,
+  "raw_minus_conformal_fp_per_10k": 25.057530043467143,
+  "raw_minus_conformal_ci": [
+    10.023012017386861,
+    42.597801073894146
+  ]
+}

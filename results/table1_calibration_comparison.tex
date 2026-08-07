@@ -1,0 +1,26 @@
+\begin{table}[t]
+\caption{FPR control across three LMs and four calibration methods ($\alpha = 0.01$)}
+\label{tab:calibration_comparison}
+\centering
+\small
+\begin{tabular}{llccccc}
+\toprule
+LM & Calibration & Recall & Obs.\ FPR & FPR viol. & Precision & F1 \\
+\midrule
+BERT (fine-tuned) & Raw threshold & 0.996 $\pm$ 0.001 & 0.008 & -0.0016 & 0.992 & 0.994 \\
+ & Temp. scaling & 0.996 $\pm$ 0.001 & 0.008 & -0.0016 & 0.992 & 0.994 \\
+ & Isotonic reg. & 0.997 $\pm$ 0.001 & 0.013 & +0.0025 & 0.988 & 0.993 \\
+ & \textbf{Conformal} & \textbf{0.995 $\pm$ 0.001} & \textbf{0.006} & \textbf{-0.0041} & \textbf{0.994} & \textbf{0.995} \\
+\midrule
+Claude Sonnet 4 & Raw threshold & 0.938 $\pm$ 0.004 & 0.040 & +0.0299 & 0.961 & 0.949 \\
+ & Temp. scaling & 0.938 $\pm$ 0.004 & 0.040 & +0.0299 & 0.961 & 0.949 \\
+ & Isotonic reg. & 0.938 $\pm$ 0.004 & 0.040 & +0.0299 & 0.961 & 0.949 \\
+ & \textbf{Conformal} & \textbf{0.875 $\pm$ 0.005} & \textbf{0.008} & \textbf{-0.0021} & \textbf{0.991} & \textbf{0.930} \\
+\midrule
+GPT-4o & Raw threshold & 0.887 $\pm$ 0.005 & 0.015 & +0.0053 & 0.984 & 0.933 \\
+ & Temp. scaling & 0.887 $\pm$ 0.005 & 0.015 & +0.0053 & 0.984 & 0.933 \\
+ & Isotonic reg. & 0.887 $\pm$ 0.005 & 0.015 & +0.0053 & 0.984 & 0.933 \\
+ & \textbf{Conformal} & \textbf{0.564 $\pm$ 0.007} & \textbf{0.001} & \textbf{-0.0092} & \textbf{0.999} & \textbf{0.721} \\
+\bottomrule
+\end{tabular}
+\end{table}
