@@ -22,4 +22,4 @@ SOFTWARE.
 
 This license covers original source code and documentation only. It does not
 cover or relicense third-party datasets, model weights, or provider outputs.
-See `THIRD_PARTY_DATA.md`.
+See `THIRD_PARTY_DATA.md` and `PROVIDER_OUTPUTS.md`.

@@ -2,6 +2,8 @@
 
 This artifact accompanies the COLM 2026 camera-ready manuscript
 "ConformalGuard: False-Positive-Controlled Action Gating for LM Classifiers."
+It is a privacy-preserving verification and reconstruction artifact, not a
+bit-for-bit recipe for rerunning mutable model-provider APIs.
 
 ## What changed after the accepted submission
 
@@ -33,17 +35,23 @@ own copyright or reuse terms. The export instead includes:
 - all reported result tables and verification scripts.
 
 See `THIRD_PARTY_DATA.md` before downloading or processing the corpora.
+See `PROVIDER_OUTPUTS.md` for the scope and reuse status of the numeric
+provider-score files.
 
 ## Quick verification
 
 From the exported artifact root:
 
 ```bash
+python experiments/assemble_scores.py
+python experiments/generate_camera_ready_robustness.py
 python experiments/generate_camera_ready_low_prevalence.py
 python scripts/verify_camera_ready_artifact.py
 ```
 
-Both commands use the Python standard library.
+These commands use the Python standard library. The robustness generator
+reproduces the calibration sensitivity, source-shift, within-source, and
+randomized tie-breaking analyses from the bundled pseudonymous scores.
 
 The accepted-submission calibration runner is retained as
 `experiments/run_calibration_comparison_submission.py` for provenance and for
@@ -73,7 +81,10 @@ The final files should match the counts and SHA-256 hashes in
 `data/splits_v2/`. Upstream hosting can change; if a download hash fails, do
 not silently substitute a newer snapshot.
 
-## Build this export from the paper repository
+## Maintainer-only release build
+
+The following command is for maintainers with the private paper repository;
+it is not required for public verification:
 
 ```bash
 bash camera-ready/v10/artifact/scripts/build_camera_ready_artifact.sh

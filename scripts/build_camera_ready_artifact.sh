@@ -32,9 +32,14 @@ rsync -a --exclude='__pycache__/' --exclude='*.pyc' "$OVERLAY_ROOT/" "$PACKAGE/"
 STOCHASTIC="$PAPER_ROOT/reviews/openreview-2026-05-response/full-stochastic-averaging"
 cp "$STOCHASTIC/full_stochastic_averaging_summary.json" \
   "$PACKAGE/results/full_stochastic_averaging_summary.json"
+cp "$PAPER_ROOT/reviews/openreview-2026-05-response/generate_rebuttal_tables.py" \
+  "$PACKAGE/experiments/generate_camera_ready_robustness.py"
 
+python3 "$PACKAGE/experiments/assemble_scores.py"
+python3 "$PACKAGE/experiments/generate_camera_ready_robustness.py"
 python3 "$PACKAGE/experiments/generate_camera_ready_low_prevalence.py"
 python3 "$PACKAGE/scripts/verify_camera_ready_artifact.py"
+rm "$PACKAGE/scores.csv"
 
 (
   cd "$PACKAGE"

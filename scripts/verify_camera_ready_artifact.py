@@ -40,6 +40,25 @@ counts = {
 }
 require(counts == {"val": 3742, "cal": 2000, "test": 7991}, "score split counts")
 
+provider_score_hashes = {
+    "llm_scores_claude_v2.json": "33cc08d8d828b874b3b52ba8215cd72b8a6a16ac26271279d28e87fa1dda720b",
+    "llm_scores_gpt_v2.json": "2a945a19fab6e9f1a164f45de9a5be2a4fa50375013752be0f3e4ef963ed104b",
+}
+for filename, expected_hash in provider_score_hashes.items():
+    path = ROOT / "results" / filename
+    require(hashlib.sha256(path.read_bytes()).hexdigest() == expected_hash, f"{filename} hash")
+
+analysis = (ROOT / "results/camera_ready_analysis_tables.md").read_text()
+expected_analysis_rows = (
+    "| BERT | Temp. scaling balanced-val | 0.9963 | 0.0084 | 0.9919 | 0.9941 | T=1.574 |",
+    "| Claude Sonnet 4 | Temp. scaling balanced-val | 0.9377 | 0.0399 | 0.9608 | 0.9491 | T=0.626 |",
+    "| GPT-4o | 0.01 | 0.5640 | 0.0008 | 0.9987 | 0.7209 |",
+    "| GPT-4o | spamassassin_ham | 756 | enron_ham | 3110 | 0.0174 | 0.0074 |",
+    "| GPT-4o | 0.01 | 0.800 ± 0.004 | 0.011 ± 0.001 | 0.986 | 0.883 | 17.2% | 7.0% |",
+)
+for row in expected_analysis_rows:
+    require(row in analysis, f"camera-ready analysis row: {row}")
+
 with (ROOT / "results/table2_low_prevalence_camera_ready.csv").open(newline="") as handle:
     low_prevalence = {row["method"]: row for row in csv.DictReader(handle)}
 require(round(float(low_prevalence["Raw threshold"]["fp_per_10k"])) == 83, "raw FP/10K")
