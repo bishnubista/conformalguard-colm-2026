@@ -10,9 +10,12 @@ from __future__ import annotations
 import csv
 import json
 import math
+import os
 import random
 from bisect import bisect_left, bisect_right
 from collections import Counter, defaultdict
+from decimal import Decimal, ROUND_HALF_UP
+from fractions import Fraction
 from pathlib import Path
 
 
@@ -23,7 +26,12 @@ if (ARTIFACT_ROOT / "results/bert_scores_v2.json").exists():
     SCORES = ARTIFACT_ROOT / "scores.csv"
     OUT = RESULTS / "camera_ready_analysis_tables.md"
 else:
-    EXP = Path("/Users/bishnubista/Projects/experiments/ConformalGuard")
+    experiment_root = os.environ.get("CONFORMALGUARD_EXPERIMENT_ROOT")
+    if not experiment_root:
+        raise RuntimeError(
+            "Set CONFORMALGUARD_EXPERIMENT_ROOT when running outside the public artifact"
+        )
+    EXP = Path(experiment_root)
     RESULTS = EXP / "results"
     SCORES = EXP / "scores.csv"
     OUT = ROOT / "analysis-tables.md"
@@ -223,6 +231,12 @@ def mean(xs: list[float]) -> float:
 def std(xs: list[float]) -> float:
     m = mean(xs)
     return math.sqrt(sum((x - m) ** 2 for x in xs) / max(len(xs), 1))
+
+
+def format_fraction_mean(values: list[Fraction]) -> str:
+    exact_mean = sum(values, Fraction(0, 1)) / max(len(values), 1)
+    decimal_mean = Decimal(exact_mean.numerator) / Decimal(exact_mean.denominator)
+    return str(decimal_mean.quantize(Decimal("0.001"), rounding=ROUND_HALF_UP))
 
 
 def percentile(xs: list[float], q: float) -> float:
@@ -443,6 +457,7 @@ def main() -> None:
         labels = [r["label_int"] for r in test]
         for alpha in [0.001, 0.005, 0.01, 0.05, 0.10]:
             metric_lists: dict[str, list[float]] = defaultdict(list)
+            metric_fractions: dict[str, list[Fraction]] = defaultdict(list)
             dep_fracs: list[float] = []
             first_preds = None
             disagreements: list[float] = []
@@ -456,13 +471,17 @@ def main() -> None:
                 dep_fracs.append(dep_frac)
                 for key in ("recall", "fpr", "precision", "f1"):
                     metric_lists[key].append(m[key])
+                metric_fractions["recall"].append(Fraction(m["tp"], m["tp"] + m["fn"]))
+                metric_fractions["fpr"].append(Fraction(m["fp"], m["fp"] + m["tn"]))
+                metric_fractions["precision"].append(Fraction(m["tp"], max(m["tp"] + m["fp"], 1)))
+                metric_fractions["f1"].append(Fraction(2 * m["tp"], max(2 * m["tp"] + m["fp"] + m["fn"], 1)))
             rand_rows.append([
                 name,
                 str(alpha),
-                f"{mean(metric_lists['recall']):.3f} ± {std(metric_lists['recall']):.3f}",
-                f"{mean(metric_lists['fpr']):.3f} ± {std(metric_lists['fpr']):.3f}",
-                f"{mean(metric_lists['precision']):.3f}",
-                f"{mean(metric_lists['f1']):.3f}",
+                f"{format_fraction_mean(metric_fractions['recall'])} ± {std(metric_lists['recall']):.3f}",
+                f"{format_fraction_mean(metric_fractions['fpr'])} ± {std(metric_lists['fpr']):.3f}",
+                format_fraction_mean(metric_fractions["precision"]),
+                format_fraction_mean(metric_fractions["f1"]),
                 f"{mean(dep_fracs):.1%}",
                 f"{mean(disagreements):.1%}",
             ])
