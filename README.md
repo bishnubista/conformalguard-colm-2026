@@ -5,6 +5,8 @@ This artifact accompanies the COLM 2026 camera-ready manuscript
 It is a privacy-preserving verification and reconstruction artifact, not a
 bit-for-bit recipe for rerunning mutable model-provider APIs.
 
+[Paper on arXiv](https://arxiv.org/abs/2610.14365)
+
 ## What changed after the accepted submission
 
 The accepted v7 supplementary archive is preserved unchanged at
